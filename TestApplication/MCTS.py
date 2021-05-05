@@ -21,7 +21,15 @@ def MCTS_Move(board, combinations, values, playerCombinations, playerValues, cur
     simCurPlayer = c.Boolean(curPlayer)
 
     #Create a list of all untaken spaces
-    untaken = trial.getBestMovesInAnArrayFast(board, values, playerValues, combinations, playerCombinations, simCurPlayer.value)
+    if (g.rawMCTS):
+        untaken = []
+        for i in range(len(board)):
+            for j in range(len(board[i])):
+                if (board[i][j] == 0):
+                    untaken.append(c.CoordinatePair(i, j))
+
+    else:
+        untaken = trial.getBestMovesInAnArrayFast(board, values, playerValues, combinations, playerCombinations, simCurPlayer.value)
     #print(len(untaken))
 
     #Run simulations according to the number of simulations required
@@ -97,11 +105,16 @@ def simulateGame(simBoard, combinations, playerCombinations, values, playerValue
     #**This could be improved if we make RandoMove an index of untaken rather
     #**than a Coordinate Pair itself, but it does look ugly
         curPlayer.value = not curPlayer.value
-        if (curPlayer.value):
-            simUntaken = trial.getBestMovesInAnArrayFast(simBoard, playerValues, values, playerCombinations, combinations, curPlayer.value)
+        
+        if (g.rawMCTS):
+            simUntaken.remove(randoMove)
+        
         else:
-            simUntaken = trial.getBestMovesInAnArrayFast(simBoard, values, playerValues, combinations, playerCombinations, curPlayer.value)
-        #simUntaken.remove(randoMove)
+            if (curPlayer.value):
+                simUntaken = trial.getBestMovesInAnArrayFast(simBoard, playerValues, values, playerCombinations, combinations, curPlayer.value)
+            else:
+                simUntaken = trial.getBestMovesInAnArrayFast(simBoard, values, playerValues, combinations, playerCombinations, curPlayer.value)
+    
     #Get another random untaken space
         if (len(simUntaken) > 0):
             randoMove = random.choice(simUntaken)

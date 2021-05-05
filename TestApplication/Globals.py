@@ -1,8 +1,13 @@
 #Variables to alter game
 width = 19
 n = 5
-numberOfSimulations = 50
-playingAgainstMCTS = True
+numberOfSimulations = 10
+playingAgainstMCTS = False
+
+
+#Designates a pure implementation of the MCTS without the Value system as a guide
+#Better for small boards, worse for large boards
+rawMCTS = False
 
 #Variance identifies the max range of possible moves the game can explore.
 #If you want it to make less value-centric moves and focus instead on exploring, increase these variables.
